@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  
+</head>
+<body>
+   <header>
+      <h1>Hussain Traders App</h1>
+  </header>
+
+  <nav>
+      <a href="/">HOME</a>
+      <a href="/addcust">Add New Customer</a>
+      <a href="/listcust">List Customers</a>
+  </nav>
+
+
+    <main>
+        <a href="/">HOME</a>
+
+        <div class="message">{{ msg }}</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>CNIC</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Region</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in customers %}
+                <tr>
+                    <td>{{ row["cnic"] }}</td>
+                    <td>{{ row["name"] }}</td>
+                    <td>{{ row["addr"] }}</td>
+                    <td>{{ row["region"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 - All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
