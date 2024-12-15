@@ -22,8 +22,21 @@
     <main>
         <form action="{{ url_for('addcust') }}" method="POST">
             <h3>Customer Information</h3>
-          
+            
             <table>
+                <tr>
+                    <td colspan="2">
+                        <label for="region">Region</label>
+                        <select id="region" name="region">
+                          <option value="wazirabad">Wazirabad</option>
+                          <option value="mardayke">Mardeke</option>
+                          <option value="other">Other</option>
+                        </select>
+                        <br>
+                        <br>
+                        <br>
+                    </td>
+                </tr>
                 <tr> 
                     <td>
                         <label for="cnic">CNIC *</label><br>

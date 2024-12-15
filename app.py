@@ -28,23 +28,40 @@ def addcust():
          advance = request.form['advance']
          price = request.form['price']
          addr = request.form['address']
+         region = str(request.form['region'])
          
          remaining_amount = int(price) - int(advance)
          agreed_installment = (int(price) - int(advance))/10
          
          with sql.connect("ht.db") as con:
             cur = con.cursor()
-            cur.execute("INSERT INTO customers (cnic,name,father_name, addr,mobile_number,product, guarantor1, guarantor2) VALUES (?,?,?,?,?,?,?,?)",(cnic, name,father_name, addr,mobile_number,product,guarntor1, guarntor2))
+
+            cur.execute("""
+                        INSERT INTO customers (name, father_name, addr, cnic, product, mobile_number, guarantor1, guarantor2 , region) VALUES 
+                                                (:name, :father_name, :addr, :cnic, :product, :mobile_number, :guarantor1, :guarantor2, :region)""",
+                                                (name, father_name, addr, cnic, product, mobile_number, guarntor1, guarntor2, region))
             
-            cur.execute("INSERT INTO installments (customer_cnic,advance,sale_price,remaining_amount, agreed_installment, created ) VALUES (?,?,?,?,?,?)",(cnic, advance,price,remaining_amount, agreed_installment, str(date.today())) )
-            # cur.execute("INSERT INTO logs (customer_cnic, name, product, paid_amount, created) VALUES (?, ?, ?, ?, ?)", (cnic, name, product, advance, date.today ))
+           
+            customer_id = cur.lastrowid
+
+            cur.execute("""
+                        INSERT INTO installments (customer_id,product, advance,sale_price,remaining_amount, agreed_installment) VALUES 
+                                                (:customer_id, :product, :advance, :sale_price, :remaining_amount, :agreed_installment)""",
+                                                (customer_id, product, advance,price,remaining_amount, agreed_installment))
+            
+            installment_id = cur.lastrowid
+
+            cur.execute("""
+                        INSERT INTO logs (customer_id, installment_id, paid_amount) VALUES 
+                        (:customer_id, :installment_id, :paid_amount)""", 
+                        (customer_id,installment_id, advance))
           
             con.commit()
-            msg = "findisted"
+            msg = "RECORD ADDED SUCCESSFULLY!"
      
       except:
          con.rollback()
-         msg = "some error occuurred"
+         msg = "Error occurred in insertion"
       finally:
          return render_template("listcust.html",msg = msg)
          con.close()
