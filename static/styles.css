@@ -55,10 +55,10 @@ footer {
 form {
     background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 500px;
+    border-radius: 1px;
+    padding: 1px;
+    margin: 1px auto;
+    max-width: auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -112,7 +112,7 @@ table thead {
 
 table th,
 table td {
-    padding: 10px;
+    padding: 1px;
     border: 1px solid #ccc;
 }
 

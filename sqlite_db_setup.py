@@ -4,13 +4,15 @@ conn = sqlite3.connect('ht.db')
 print("Opened database successfully")
 
 # conn.execute('DROP TABLE installments')
-# conn.execute('DROP TABLE products')
-# conn.execute('DROP TABLE customers')
+#onn.execute('DROP TABLE customers')
+# conn.execute('DROP TABLE logs')
 
-# conn.execute('CREATE TABLE customers (name TEXT, addr TEXT, region TEXT, cnic INTEGER primary key, phonenumber INTEGER)')
 
-# conn.execute('CREATE TABLE products (name TEXT, purchaseprice INTEGER, id INTEGER primary key AUTOINCREMENT)')
+conn.execute('CREATE TABLE customers (name TEXT, father_name TEXT, addr TEXT, cnic TEXT primary key, product TEXT, mobile_number TEXT, guarantor1 TEXT, guarantor2 TEXT, created TEXT)')
 
-conn.execute('CREATE TABLE installments (product_id INTEGER, advance INTEGER,customer_cnic INTEGER, saleprice INTEGER, installment INTEGER, remainingamount INTEGER, FOREIGN KEY (customer_cnic) REFERENCES customers(cnic),FOREIGN KEY (product_id) REFERENCES products(id))')
-print("Table created successfully")
+conn.execute('CREATE TABLE installments (product TEXT, advance INTEGER,customer_cnic TEXT, sale_price INTEGER, agreed_installment INTEGER, remaining_amount INTEGER, created TEXT, modified TEXT, FOREIGN KEY (customer_cnic) REFERENCES customers(cnic))')
+
+conn.execute('CREATE TABLE logs (id INTEGER primary key AUTOINCREMENT, customer_cnic TEXT, name, TEXT,  product TEXT, paid_amount INTEGER, created TEXT)')
+
+print("Tables created successfully")
 conn.close()

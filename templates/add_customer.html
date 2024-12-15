@@ -22,18 +22,72 @@
     <main>
         <form action="{{ url_for('addcust') }}" method="POST">
             <h3>Customer Information</h3>
-            <label for="cnic">CNIC Number</label><br>
-            <input type="text" id="cnic" name="cnic" /><br>
+          
+            <table>
+                <tr> 
+                    <td>
+                        <label for="cnic">CNIC *</label><br>
+                        <input type="text" id="cnic" name="cnic" /><br>
+                        
+                    </td>
+                    <td>
+                        <label for="name">Name*</label><br>
+                        <input type="text" id="name" name="name" /><br>
+                        
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        
+                        <label for="father">Father's name*</label><br>
+                        <input type="text" id="father" name="father" /><br>
+
+                    </td>
+                    <td>
+                        <label for="address">Address</label><br>
+                        <input type="text" name="address"></input><br>
+                        
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        <label for="mobile">Mobile Number</label><br>
+                        <input type="text" id="mobile" name="mobile" /><br>
             
-            <label for="name">Name</label><br>
-            <input type="text" id="name" name="name" /><br>
+                    
+                    </td>
+                    <td>
+                        <label for="product">Product</label><br>
+                        <input type="text" id="product" name="product" /><br>          
             
-            <label for="address">Address</label><br>
-            <textarea id="address" name="address"></textarea><br>
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        <label for="guarantor1">Guarantor1</label><br>
+                        <input type="text" id="guarantor1" name="guarantor1" /><br>
+                    </td>
+                    <td>
+                        <label for="guarantor2">Guarantor2</label><br>
+                        <input type="text" id="guarantor2" name="guarantor2" /><br>          
             
-            <label for="region">Region</label><br>
-            <input type="text" id="region" name="region" /><br>
-            
+                    </td>
+                </tr>
+                <tr> 
+                    <td>                         
+         
+                    <label for="advance">Advance Amount</label><br>
+                    <input type="text" id="advance" name="advance" /><br>    
+
+                    </td>
+                    <td>
+                        <label for="price">Total Price (including Advance)</label><br>
+                        <input type="text" id="price" name="price" /><br>    
+                    </td>
+                </tr>
+               
+            </table>
+          
             <input type="submit" value="Submit" /><br>
         </form>
     </main>
