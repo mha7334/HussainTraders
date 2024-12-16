@@ -58,24 +58,31 @@
         <table>
             <thead>
                 <tr>
+                    <th>Date</th>
                     <th>CNIC</th>
                     <th>Name</th>
                     <th>Address</th>
                     <th>Region</th>
                     <th>Mobile Number</th>
                     <th>Remaining Amount</th>
+                    <th>Product</th>
+                    <th>Address</th>
                     <th>Pay Installment</th>
+                 
                 </tr>
             </thead>
             <tbody>
                 {% for row in customers %}
                 <tr>
+                    <td>{{ row["created"] }}</td>
                     <td>{{ row["cnic"] }}</td>
                     <td>{{ row["name"] }}</td>
                     <td>{{ row["addr"] }}</td>
                     <td>{{ row["region"] }}</td>
                     <td>{{ row["mobile_number"] }}</td>
                     <td>{{ row["remaining_amount"] }}</td>
+                    <td>{{ row["product"] }}</td>
+                    <td>{{ row["addr"] }}</td>
                     <td>
                         <form action="{{ url_for('pay_installment') }}" method="POST">
                             <input type="text" id="amount_{{ row['customer.id'] }}" name="amount">

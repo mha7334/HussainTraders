@@ -1,7 +1,22 @@
 <!doctype html>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Customer List</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
 <html>
+   <header>
+      <h1>Hussain Traders App</h1>
+  </header>
+
+  <nav>
+    <a href="/listcust">HOME</a>
+    <a href="/addcust">New Sale</a>
+</nav>
+
    <body>
       {{ msg }}
-      <h2><a href = "\">Back to home page</a></h2>
+      <h2><a href = "\listcust">Back to home page</a></h2>
    </body>
 </html>

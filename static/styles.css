@@ -79,6 +79,17 @@ form textarea {
     font-size: 1em;
 }
 
+form select
+{
+    width: 60%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+
 form textarea {
     height: 100px;
     resize: none;

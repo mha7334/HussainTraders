@@ -51,7 +51,7 @@ def pay_installment():
          con.rollback()
          msg = "Error occurred in update" + customer_id  + installment_id+amount
       finally:      
-         return render_template("listcust.html",msg = msg)   
+         return render_template("result.html",msg = msg)   
          con.close()
 
 @app.route('/addcust',methods = ['POST', 'GET'])
