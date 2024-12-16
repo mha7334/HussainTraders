@@ -13,17 +13,48 @@
   </header>
 
   <nav>
-      <a href="/">HOME</a>
-      <a href="/addcust">Add New Customer</a>
-      <a href="/listcust">List Customers</a>
-  </nav>
-
-
+    <a href="/listcust">HOME</a>
+    <a href="/addcust">New Sale</a>
+</nav>
     <main>
-        <a href="/">HOME</a>
+    
+
+        <table>
+           
+            <tr>
+                <td>
+                    Search by CNIC: 
+                </td>
+                <td>
+                    <form action="{{ url_for('searchcnic') }}" method="POST">
+                    <input type="text" id="searchcnic" name="cnic">
+                    <input type="submit" value="Search"/>
+                    </form>
+                </td>
+                <td>
+                    Search by Mobile Number: 
+                </td>
+                <td>
+                    <form action="{{ url_for('searchmobile') }}" method="POST">
+                    <input type="text" id="searchmobile" name="mobile">
+                    <input type="submit" value="Search"/>
+                    </form>
+                </td>
+                <td>
+                    Search by Name:
+                </td>
+                <td>
+                    <form action="{{ url_for('searchname') }}" method="POST">
+                        <input type="text" id="searchname" name="name">
+                        <input type="submit" value="Search"/>
+                        </form>
+                </td>
+            </tr>
+        
+        </table>
 
         <div class="message">{{ msg }}</div>
-
+        <form action="{{ url_for('pay_installment') }}" method="POST">
         <table>
             <thead>
                 <tr>
@@ -31,6 +62,9 @@
                     <th>Name</th>
                     <th>Address</th>
                     <th>Region</th>
+                    <th>Mobile Number</th>
+                    <th>Remaining Amount</th>
+                    <th>Pay Installment</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,6 +74,17 @@
                     <td>{{ row["name"] }}</td>
                     <td>{{ row["addr"] }}</td>
                     <td>{{ row["region"] }}</td>
+                    <td>{{ row["mobile_number"] }}</td>
+                    <td>{{ row["remaining_amount"] }}</td>
+                    <td>
+                        <form action="{{ url_for('pay_installment') }}" method="POST">
+                            <input type="text" id="amount_{{ row['customer.id'] }}" name="amount">
+                            <input type="hidden" id="customerid_{{ row['customer.id'] }}" name="customerid" value="{{ row['customer_id'] }}">
+                            <input type="hidden" id="installmentid_{{ row['id'] }}" name="installmentid" value="{{ row['id'] }}">
+
+                            <input type="submit" value="Pay"/>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 import sqlite3 as sql
 from datetime import date
 
 app = Flask(__name__)
 app.secret_key = 'fasdgfdgdfg'
-
 
 @app.route('/')
 def home():
@@ -13,6 +12,47 @@ def home():
 @app.route('/addcust')
 def new_customer():
    return render_template('add_customer.html')
+
+# @app.route('/pay')
+# def pay_amount():
+#    return render_template('home')
+
+@app.route('/pay', methods = ['POST'])
+def pay_installment():
+   if request.method == 'POST':
+      try:
+         customer_id = request.form['customerid']
+         installment_id = request.form['installmentid']
+         amount = request.form['amount']
+
+         with sql.connect("ht.db") as con:
+            con.row_factory = sql.Row
+            cur = con.cursor()
+
+            cur.execute("SELECT * FROM installments WHERE customer_id = ? AND id = ?", (customer_id, installment_id))
+
+            installment = cur.fetchone()
+            remaining_amount = int(installment['remaining_amount']) - int(amount)      
+
+            cur.execute("""
+            UPDATE installments 
+               SET remaining_amount = :remaining_amount
+               WHERE customer_id = :customer_id AND id = :installment_id
+            """, {
+            'remaining_amount': remaining_amount,
+            'customer_id': customer_id,
+            'installment_id': installment_id})
+
+            msg = "Installment successfully registered!"          
+            con.commit()
+            flash("Updated")
+            
+      except:
+         con.rollback()
+         msg = "Error occurred in update" + customer_id  + installment_id+amount
+      finally:      
+         return render_template("listcust.html",msg = msg)   
+         con.close()
 
 @app.route('/addcust',methods = ['POST', 'GET'])
 def addcust():
@@ -68,13 +108,61 @@ def addcust():
 
 @app.route('/listcust')
 def listcust():
-   con = sql.connect("student_database.db")
+   con = sql.connect("ht.db")
    con.row_factory = sql.Row
    
    cur = con.cursor()
-   cur.execute("select * from customers")
+   cur.execute("select * from installments Inner join customers on installments.customer_id = customers.id ORDER BY CREATED DESC LIMIT 100")
    
-   customers = cur.fetchall();
+   customers = cur.fetchall()
+   return render_template("listcust.html", customers = customers)
+
+
+@app.route('/searchcnic', methods = ['POST'])
+def searchcnic():
+
+   cnic = request.form['cnic']
+   con = sql.connect("ht.db")
+   con.row_factory = sql.Row
+   
+   cur = con.cursor()
+
+   # cur.execute("select * from customers where cnic = ?", (cnic))
+
+   # customer = cur.fetchone()
+
+   cur.execute("select * from installments Inner join customers on installments.customer_id = customers.id where customers.cnic = ?", (cnic,))
+   
+   customers = cur.fetchall()
+   return render_template("listcust.html", customers = customers)
+
+
+@app.route('/searchmobile', methods = ['POST'])
+def searchmobile():
+
+   mobile = request.form['mobile']
+   con = sql.connect("ht.db")
+   con.row_factory = sql.Row
+   
+   cur = con.cursor()
+
+   cur.execute("select * from installments Inner join customers on installments.customer_id = customers.id where customers.mobile_number = ?", (mobile,))
+   customers = cur.fetchall()
+   return render_template("listcust.html", customers = customers)
+
+@app.route('/searchname', methods = ['POST'])
+def searchname():
+
+   name = request.form['name']
+   con = sql.connect("ht.db")
+   con.row_factory = sql.Row
+   
+   cur = con.cursor()
+
+   cur.execute("SELECT * FROM installments INNER JOIN customers ON installments.customer_id = customers.id WHERE customers.name LIKE ?", (f"%{name}%",)
+)
+
+   customers = cur.fetchall()
    return render_template("listcust.html", customers = customers)
 
 

@@ -13,15 +13,14 @@
     </header>
 
     <nav>
-        <a href="/">HOME</a>
-        <a href="/addcust">Add New Customer</a>
-        <a href="/listcust">List Customers</a>
+        <a href="/listcust">HOME</a>
+        <a href="/addcust">New Sale</a>
     </nav>
 
     
     <main>
         <form action="{{ url_for('addcust') }}" method="POST">
-            <h3>Customer Information</h3>
+            <h3>New Sale</h3>
             
             <table>
                 <tr>
@@ -39,12 +38,12 @@
                 </tr>
                 <tr> 
                     <td>
-                        <label for="cnic">CNIC *</label><br>
+                        <label for="cnic">CNIC</label><br>
                         <input type="text" id="cnic" name="cnic" /><br>
                         
                     </td>
                     <td>
-                        <label for="name">Name*</label><br>
+                        <label for="name">Name</label><br>
                         <input type="text" id="name" name="name" /><br>
                         
                     </td>
@@ -52,7 +51,7 @@
                 <tr> 
                     <td>
                         
-                        <label for="father">Father's name*</label><br>
+                        <label for="father">Father's name<br>
                         <input type="text" id="father" name="father" /><br>
 
                     </td>

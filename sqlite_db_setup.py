@@ -15,6 +15,5 @@ conn.execute('CREATE TABLE IF NOT EXISTS installments (id INTEGER primary key AU
 conn.execute('CREATE TABLE IF NOT EXISTS logs (id INTEGER primary key AUTOINCREMENT,customer_id INTEGER, installment_id INTEGER, paid_amount INTEGER, created DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (customer_id) REFERENCES customers(id), FOREIGN KEY (installment_id) REFERENCES installments(id) )')
 
 
-
 print("Tables created successfully")
 conn.close()
