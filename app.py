@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash
 import sqlite3 as sql
-from datetime import date
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.secret_key = 'fasdgfdgdfg'
@@ -34,14 +35,18 @@ def pay_installment():
             installment = cur.fetchone()
             remaining_amount = int(installment['remaining_amount']) - int(amount)      
 
+            modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
             cur.execute("""
             UPDATE installments 
-               SET remaining_amount = :remaining_amount
+               SET remaining_amount = :remaining_amount,
+                   modified = :modified     
                WHERE customer_id = :customer_id AND id = :installment_id
             """, {
             'remaining_amount': remaining_amount,
             'customer_id': customer_id,
-            'installment_id': installment_id})
+            'installment_id': installment_id,
+            'modified': modified})
 
             msg = "Installment successfully registered!"          
             con.commit()
@@ -114,6 +119,26 @@ def listcust():
    cur = con.cursor()
    cur.execute("select * from installments Inner join customers on installments.customer_id = customers.id ORDER BY CREATED DESC LIMIT 100")
    
+   customers = cur.fetchall()
+   return render_template("listcust.html", customers = customers)
+
+@app.route('/shortpayments', methods = ['POST'])
+def short_installments():
+
+   con = sql.connect("ht.db")
+   con.row_factory = sql.Row
+   
+   cur = con.cursor()
+
+   now = datetime.now()
+   current_month_5th = now.replace(day=15).strftime('%Y-%m-%d %H:%M:%S')
+
+# Query for records modified on or after the 5th of the current month
+   cur.execute("""
+      select * from installments Inner join customers on installments.customer_id = customers.id
+      WHERE modified <= ?
+   """, (current_month_5th,))
+
    customers = cur.fetchall()
    return render_template("listcust.html", customers = customers)
 

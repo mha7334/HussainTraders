@@ -54,11 +54,13 @@
         </table>
 
         <div class="message">{{ msg }}</div>
-        <form action="{{ url_for('pay_installment') }}" method="POST">
+        <form action="{{ url_for('short_installments') }}" method="POST">
+            <input type="submit" value="Show all short payments"/>
+        </form>
         <table>
             <thead>
                 <tr>
-                    <th>Date</th>
+                    <th>Modified</th>
                     <th>CNIC</th>
                     <th>Name</th>
                     <th>Address</th>
@@ -74,7 +76,7 @@
             <tbody>
                 {% for row in customers %}
                 <tr>
-                    <td>{{ row["created"] }}</td>
+                    <td>{{ row["modified"] }}</td>
                     <td>{{ row["cnic"] }}</td>
                     <td>{{ row["name"] }}</td>
                     <td>{{ row["addr"] }}</td>
