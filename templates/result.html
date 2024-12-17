@@ -18,6 +18,20 @@
    <body>
       
       <h3>{{ msg }}</h3>
+
+      <table>         
+         {% for row in logs %}
+         <tr>
+            <td>
+                {{ row.created}}
+            </td>
+          <td>
+                {{row.paid_amount}}
+          </td>
+         </tr>
+         {% endfor %}
+      </table>
+
       <h2><a href = "\listcust">Back to home page</a></h2>
    </body>
 </html>

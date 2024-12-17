@@ -56,7 +56,7 @@
             <select id="region" name="region">
                 <option value="all">All</option>
                 {% for region in regions %}
-                    <option value="{{ region[0] }}">{{ region[1] }}</option>
+                    <option value="{{ region[0] }}" {% if region[0] == selected_region %}selected{% endif %}>{{ region[1] }}</option>
                 {% endfor %}
             </select>
 
@@ -75,6 +75,7 @@
                     <th>Remaining Amount</th>
                     <th>Product</th>                    
                     <th>Pay Installment</th>
+                    <th>Leder</th>
                  
                 </tr>
             </thead>
@@ -96,17 +97,22 @@
                             <input type="hidden" id="customerid_{{ row['customer.id'] }}" name="customerid" value="{{ row['customer_id'] }}">
                             <input type="hidden" id="installmentid_{{ row['id'] }}" name="installmentid" value="{{ row['id'] }}">
 
-                            <input type="submit" value="Pay"/> <div class="message">{{ msg1 }}</div>
+                            <input type="submit" value="Pay"/> 
                         </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('ledger') }}" method="POST">
+                            <input type="hidden" id="customerid_{{ row['customer.id'] }}" name="customerid" value="{{ row['customer_id'] }}">
+                            <input type="hidden" id="installmentid_{{ row['id'] }}" name="installmentid" value="{{ row['id'] }}">
+
+                            <input type="submit" value=">>Ledger"/></div>
+                        </form>
+
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </main>
-
-    <footer>
-      <p>&copy; 2024 - All Rights Reserved.</p>
-  </footer>
 </body>
 </html>

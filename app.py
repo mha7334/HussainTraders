@@ -49,10 +49,12 @@ def pay_installment():
             'installment_id': installment_id,
             'modified': modified})
 
+            cur.execute("""
+                        INSERT INTO logs (customer_id, installment_id, paid_amount) VALUES 
+                        (:customer_id, :installment_id, :paid_amount)""", 
+                        (customer_id,installment_id, amount))
             msg = "Success!"          
-            con.commit()
-
-            
+            con.commit()            
       except:
          con.rollback()
          msg = "Error occurred in update"
@@ -104,7 +106,7 @@ def addcust():
                         (customer_id,installment_id, advance))
           
             con.commit()
-            msg = "RECORD ADDED SUCCESSFULLY!"
+            msg = "NEW SALE ADDED!"
      
       except:
          con.rollback()
@@ -130,6 +132,19 @@ def fetchAllInstallments(msg):
    
    return render_template("listcust.html", customers=customers, regions=regions, msg=msg)
    
+def fetchAllInstallmentsByRegion(msg,region):
+   con = sql.connect("ht.db")
+   con.row_factory = sql.Row
+   cur = con.cursor()
+   cur.execute("""select * from installments Inner join customers on installments.customer_id = customers.id ORDER BY MODIFIED DESC LIMIT 100
+               WHERE region = ?
+               """, (region,))
+   customers = cur.fetchall()
+
+   cur.execute("SELECT name, value FROM regions")
+   regions = cur.fetchall()
+   
+   return render_template("listcust.html", customers=customers, regions=regions, msg=msg, selectedregion=region)
 
 @app.route('/shortpayments', methods = ['POST'])
 def short_installments():
@@ -140,16 +155,47 @@ def short_installments():
    cur = con.cursor()
 
    now = datetime.now()
-   current_month_5th = now.replace(day=16).strftime('%Y-%m-%d %H:%M:%S')
+   current_month_5th = now.replace(day=18).strftime('%Y-%m-%d %H:%M:%S')
+
+   cur.execute("SELECT name, value FROM regions")
+   regions = cur.fetchall()
+
+   if region == 'all':
+# Query for records modified on or after the 5th of the current month
+      cur.execute("""
+         select * from installments Inner join customers on installments.customer_id = customers.id
+         WHERE modified <= ?
+      """, (current_month_5th,))
+
+      customers = cur.fetchall()
+      return render_template("listcust.html", customers = customers, regions=regions, selected_region='all')
+   else:
+      cur.execute("""
+         select * from installments Inner join customers on installments.customer_id = customers.id
+         WHERE modified <= ? AND region = ?
+      """, (current_month_5th,region))
+
+      customers = cur.fetchall()
+      return render_template("listcust.html", customers = customers, regions=regions, selected_region=region)
+
+@app.route('/ledger', methods = ['POST'])
+def ledger():
+   customer_id = request.form['customerid']
+   
+   con = sql.connect("ht.db")
+   con.row_factory = sql.Row
+   
+   cur = con.cursor()
 
 # Query for records modified on or after the 5th of the current month
    cur.execute("""
-      select * from installments Inner join customers on installments.customer_id = customers.id
-      WHERE modified <= ?
-   """, (current_month_5th,))
+      select * from logs
+      WHERE customer_id = ?
+               """, (customer_id,))
 
-   customers = cur.fetchall()
-   return render_template("listcust.html", customers = customers)
+   logs = cur.fetchall()
+   return render_template("result.html", msg="", logs = logs)
+
 
 
 @app.route('/searchcnic', methods = ['POST'])
