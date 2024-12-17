@@ -131,7 +131,7 @@ def short_installments():
    cur = con.cursor()
 
    now = datetime.now()
-   current_month_5th = now.replace(day=15).strftime('%Y-%m-%d %H:%M:%S')
+   current_month_5th = now.replace(day=16).strftime('%Y-%m-%d %H:%M:%S')
 
 # Query for records modified on or after the 5th of the current month
    cur.execute("""

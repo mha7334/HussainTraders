@@ -67,8 +67,7 @@
                     <th>Region</th>
                     <th>Mobile Number</th>
                     <th>Remaining Amount</th>
-                    <th>Product</th>
-                    <th>Address</th>
+                    <th>Product</th>                    
                     <th>Pay Installment</th>
                  
                 </tr>
@@ -83,8 +82,7 @@
                     <td>{{ row["region"] }}</td>
                     <td>{{ row["mobile_number"] }}</td>
                     <td>{{ row["remaining_amount"] }}</td>
-                    <td>{{ row["product"] }}</td>
-                    <td>{{ row["addr"] }}</td>
+                    <td>{{ row["product"] }}</td>                    
                     <td>
                         <form action="{{ url_for('pay_installment') }}" method="POST">
                             <input type="text" id="amount_{{ row['customer.id'] }}" name="amount">
