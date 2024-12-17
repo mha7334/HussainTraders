@@ -24,16 +24,19 @@
             
             <table>
                 <tr>
-                    <td colspan="2">
-                        <label for="region">Region</label>
+                    <td>                    
+                        <label for="region">Select a Region:</label><br>
                         <select id="region" name="region">
-                          <option value="wazirabad">Wazirabad</option>
-                          <option value="mardayke">Mardeke</option>
-                          <option value="other">Other</option>
+                            <!-- <option value="all">All</option> -->
+                            {% for region in regions %}
+                                <option value="{{ region[0] }}">{{ region[1] }}</option>
+                            {% endfor %}
                         </select>
-                        <br>
-                        <br>
-                        <br>
+                       
+                    </td>
+                    <td>
+                        <label for="account">Account Number</label><br>
+                        <input type="text" id="account" name="account" /><br>
                     </td>
                 </tr>
                 <tr> 

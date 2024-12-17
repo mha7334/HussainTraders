@@ -17,10 +17,7 @@
     <a href="/addcust">New Sale</a>
 </nav>
     <main>
-    
-
-        <table>
-           
+        <table>           
             <tr>
                 <td>
                     Search by CNIC: 
@@ -55,13 +52,22 @@
 
         <div class="message">{{ msg }}</div>
         <form action="{{ url_for('short_installments') }}" method="POST">
-            <input type="submit" value="Show all short payments"/>
+            <label for="region">Select a Region:</label>
+            <select id="region" name="region">
+                <option value="all">All</option>
+                {% for region in regions %}
+                    <option value="{{ region[0] }}">{{ region[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="submit" value="Show short payments"/>
         </form>
         <table>
             <thead>
                 <tr>
                     <th>Modified</th>
                     <th>CNIC</th>
+                    <th>Account</th>
                     <th>Name</th>
                     <th>Address</th>
                     <th>Region</th>
@@ -77,11 +83,12 @@
                 <tr>
                     <td>{{ row["modified"] }}</td>
                     <td>{{ row["cnic"] }}</td>
+                    <td>{{ row["account_number"] }}</td>
                     <td>{{ row["name"] }}</td>
                     <td>{{ row["addr"] }}</td>
                     <td>{{ row["region"] }}</td>
                     <td>{{ row["mobile_number"] }}</td>
-                    <td>{{ row["remaining_amount"] }}</td>
+                    <td>{{ row["remaining_amount"] }} Rs.</td>
                     <td>{{ row["product"] }}</td>                    
                     <td>
                         <form action="{{ url_for('pay_installment') }}" method="POST">
@@ -89,7 +96,7 @@
                             <input type="hidden" id="customerid_{{ row['customer.id'] }}" name="customerid" value="{{ row['customer_id'] }}">
                             <input type="hidden" id="installmentid_{{ row['id'] }}" name="installmentid" value="{{ row['id'] }}">
 
-                            <input type="submit" value="Pay"/>
+                            <input type="submit" value="Pay"/> <div class="message">{{ msg1 }}</div>
                         </form>
                     </td>
                 </tr>

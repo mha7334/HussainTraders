@@ -11,12 +11,13 @@ def home():
    return render_template('home.html')
 
 @app.route('/addcust')
-def new_customer():
-   return render_template('add_customer.html')
-
-# @app.route('/pay')
-# def pay_amount():
-#    return render_template('home')
+def new_customer():    
+    with sql.connect("ht.db") as con:            
+      con.row_factory = sql.Row
+      cur = con.cursor()
+      cur.execute("SELECT name, value FROM regions")
+      regions = cur.fetchall()
+      return render_template('add_customer.html', regions=regions)
 
 @app.route('/pay', methods = ['POST'])
 def pay_installment():
@@ -48,15 +49,15 @@ def pay_installment():
             'installment_id': installment_id,
             'modified': modified})
 
-            msg = "Installment successfully registered!"          
+            msg = "Success!"          
             con.commit()
-            flash("Updated")
+
             
       except:
          con.rollback()
-         msg = "Error occurred in update" + customer_id  + installment_id+amount
-      finally:      
-         return render_template("result.html",msg = msg)   
+         msg = "Error occurred in update"
+      finally: 
+         return fetchAllInstallments(msg) 
          con.close()
 
 @app.route('/addcust',methods = ['POST', 'GET'])
@@ -64,6 +65,7 @@ def addcust():
    if request.method == 'POST':
       try:
          cnic = request.form['cnic']
+         account = request.form['account']
          name = request.form['name']
          father_name = request.form['father']
          mobile_number = request.form['mobile']
@@ -82,9 +84,9 @@ def addcust():
             cur = con.cursor()
 
             cur.execute("""
-                        INSERT INTO customers (name, father_name, addr, cnic, product, mobile_number, guarantor1, guarantor2 , region) VALUES 
-                                                (:name, :father_name, :addr, :cnic, :product, :mobile_number, :guarantor1, :guarantor2, :region)""",
-                                                (name, father_name, addr, cnic, product, mobile_number, guarntor1, guarntor2, region))
+                        INSERT INTO customers (name, father_name, addr, cnic, account_number, product, mobile_number, guarantor1, guarantor2 , region) VALUES 
+                                                (:name, :father_name, :addr, :cnic, :account_number, :product, :mobile_number, :guarantor1, :guarantor2, :region)""",
+                                                (name, father_name, addr, cnic, account, product, mobile_number, guarntor1, guarntor2, region))
             
            
             customer_id = cur.lastrowid
@@ -108,23 +110,30 @@ def addcust():
          con.rollback()
          msg = "Error occurred in insertion"
       finally:
-         return render_template("listcust.html",msg = msg)
+         return fetchAllInstallments(msg)       
          con.close()
 
 @app.route('/listcust')
 def listcust():
+   msg = ""
+   return fetchAllInstallments(msg)
+
+def fetchAllInstallments(msg):
    con = sql.connect("ht.db")
    con.row_factory = sql.Row
-   
    cur = con.cursor()
-   cur.execute("select * from installments Inner join customers on installments.customer_id = customers.id ORDER BY CREATED DESC LIMIT 100")
-   
+   cur.execute("select * from installments Inner join customers on installments.customer_id = customers.id ORDER BY MODIFIED DESC LIMIT 100")
    customers = cur.fetchall()
-   return render_template("listcust.html", customers = customers)
+
+   cur.execute("SELECT name, value FROM regions")
+   regions = cur.fetchall()
+   
+   return render_template("listcust.html", customers=customers, regions=regions, msg=msg)
+   
 
 @app.route('/shortpayments', methods = ['POST'])
 def short_installments():
-
+   region = request.form['region']
    con = sql.connect("ht.db")
    con.row_factory = sql.Row
    
