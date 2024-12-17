@@ -82,7 +82,8 @@
             <tbody>
                 {% for row in customers %}
                 <tr>
-                    <td>{{ row["modified"] }}</td>
+                    {% set first_part = row["modified"].split(' ')[0] %}
+                    <td>{{ first_part }}</td>
                     <td>{{ row["cnic"] }}</td>
                     <td>{{ row["account_number"] }}</td>
                     <td>{{ row["name"] }}</td>
