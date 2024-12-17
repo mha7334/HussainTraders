@@ -6,20 +6,36 @@
    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <html>
-   <header>
-      <h1>Hussain Traders App</h1>
-  </header>
-
-  <nav>
-    <a href="/listcust">HOME</a>
-    <a href="/addcust">New Sale</a>
-</nav>
 
    <body>
       
       <h3>{{ msg }}</h3>
 
-      <table>         
+     
+      <table>
+         {% for row in customers %}
+         <tr>
+            <td colspan="2">
+               <h3>Hussain Traders, 52000 Wazirabad, Mobile# : 03225938942</h3>
+            </td>
+         </tr>
+         <tr>
+            <td>Name: {{row.name}}</td>
+            <td>Father's name: {{row.father_name}}</td>
+         </tr>
+         <tr>
+            <td>Account#: {{row.account_number}}</td>
+            <td>Remaining amount: {{row.remaining_amount}}</td>
+         </tr>
+         {% endfor %}
+      </table>
+
+      <table>    
+         <tr>
+            <td colspan="2">
+               <h4>Last Paid Installments</h4>
+            </td>
+         </tr>     
          {% for row in logs %}
          <tr>
             <td>
@@ -32,6 +48,6 @@
          {% endfor %}
       </table>
 
-      <h2><a href = "\listcust">Back to home page</a></h2>
+      <h2><a href = "\listcust"><<<<<<<</a></h2>
    </body>
 </html>

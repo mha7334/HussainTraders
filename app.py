@@ -181,20 +181,26 @@ def short_installments():
 @app.route('/ledger', methods = ['POST'])
 def ledger():
    customer_id = request.form['customerid']
+   installment_id = request.form['installmentid']
    
    con = sql.connect("ht.db")
    con.row_factory = sql.Row
    
    cur = con.cursor()
+   cur.execute("""
+      select * from installments Inner join customers on installments.customer_id = customers.id
+      WHERE installments.id = ? AND customers.id = ?
+   """, (installment_id,customer_id))
 
-# Query for records modified on or after the 5th of the current month
+   customers = cur.fetchall()
+
    cur.execute("""
       select * from logs
       WHERE customer_id = ?
                """, (customer_id,))
 
    logs = cur.fetchall()
-   return render_template("result.html", msg="", logs = logs)
+   return render_template("result.html", msg="", customers=customers, logs=logs)
 
 
 
