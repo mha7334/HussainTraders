@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  
+</head>
+<body>
+    <header>
+        <h1>Hussain Traders App</h1>
+    </header>
+
+    <nav>
+        <a href="/listcust">HOME</a>
+        <a href="/addcust">New Sale</a>
+        <a href="/addregion">New Region</a>
+    </nav>
+
+    <h3>{{msg}}</h3>
+    <main>
+        <form action="{{ url_for('addregion') }}" method="POST">
+            <h3>Add new region:</h3>
+            
+            <table>
+                <tr> 
+                    <td>                         
+         
+                    <label for="regionname">Region Name</label><br>
+                    <input type="text" id="regionname" name="regionname" /><br>    
+
+                    </td>                  
+                </tr>
+               
+            </table>
+          
+            <input type="submit" value="Submit" /><br>
+        </form>
+    </main>
+
+</body>
+</html>

@@ -62,6 +62,36 @@ def pay_installment():
          return fetchAllInstallments(msg) 
          con.close()
 
+@app.route('/addregion', methods = ['GET'])
+def addregion_get():
+   return render_template("add_region.html")
+
+@app.route('/addregion', methods = ['POST'])
+def addregion():
+   if(request.method == 'POST'):
+      try:
+         regionname = request.form['regionname']
+
+         name = regionname.lower().replace(" ", "")
+
+         with sql.connect("ht.db") as con:
+               cur = con.cursor()
+
+               cur.execute("""
+                        INSERT INTO regions (name, value) VALUES 
+                                                (:name, :value)""",
+                                                (name, regionname))
+            
+               con.commit()
+               msg = "NEW REGION ADDED"
+     
+      except:
+            con.rollback()
+            msg = "Error occurred in insertion"
+      finally:
+            return render_template("add_region.html", msg=msg)       
+            con.close()
+
 @app.route('/addcust',methods = ['POST', 'GET'])
 def addcust():
    if request.method == 'POST':
