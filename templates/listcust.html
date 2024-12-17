@@ -51,9 +51,9 @@
         </table>
 
         <div class="message">{{ msg }}</div>
-        <form action="{{ url_for('short_installments') }}" method="POST">
+        <form action="{{ url_for('short_installments') }}" method="POST" class="select">
             <label for="region">Select a Region:</label>
-            <select id="region" name="region">
+            <select id="region" name="region" class="select">
                 <option value="all">All</option>
                 {% for region in regions %}
                     <option value="{{ region[0] }}" {% if region[0] == selected_region %}selected{% endif %}>{{ region[1] }}</option>
