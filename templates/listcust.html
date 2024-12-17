@@ -25,7 +25,7 @@
                 <td>
                     <form action="{{ url_for('searchcnic') }}" method="POST">
                     <input type="text" id="searchcnic" name="cnic">
-                    <input type="submit" value="Search"/>
+                    <input type="submit" value="Go"/>
                     </form>
                 </td>
                 <td>
@@ -34,7 +34,7 @@
                 <td>
                     <form action="{{ url_for('searchmobile') }}" method="POST">
                     <input type="text" id="searchmobile" name="mobile">
-                    <input type="submit" value="Search"/>
+                    <input type="submit" value="Go"/>
                     </form>
                 </td>
                 <td>
@@ -43,7 +43,7 @@
                 <td>
                     <form action="{{ url_for('searchname') }}" method="POST">
                         <input type="text" id="searchname" name="name">
-                        <input type="submit" value="Search"/>
+                        <input type="submit" value="Go"/>
                         </form>
                 </td>
             </tr>
@@ -74,8 +74,8 @@
                     <th>Mobile Number</th>
                     <th>Remaining Amount</th>
                     <th>Product</th>                    
+                    <th></th>
                     <th>Pay Installment</th>
-                    <th>Leder</th>
                  
                 </tr>
             </thead>
@@ -90,7 +90,16 @@
                     <td>{{ row["region"] }}</td>
                     <td>{{ row["mobile_number"] }}</td>
                     <td>{{ row["remaining_amount"] }} Rs.</td>
-                    <td>{{ row["product"] }}</td>                    
+                    <td>{{ row["product"] }}</td>       
+                    <td>
+                        <form action="{{ url_for('ledger') }}" method="POST">
+                            <input type="hidden" id="customerid_{{ row['customer.id'] }}" name="customerid" value="{{ row['customer_id'] }}">
+                            <input type="hidden" id="installmentid_{{ row['id'] }}" name="installmentid" value="{{ row['id'] }}">
+
+                            <input type="submit" value=">>>"/></div>
+                        </form>
+
+                    </td>             
                     <td>
                         <form action="{{ url_for('pay_installment') }}" method="POST">
                             <input type="text" id="amount_{{ row['customer.id'] }}" name="amount">
@@ -100,15 +109,7 @@
                             <input type="submit" value="Pay"/> 
                         </form>
                     </td>
-                    <td>
-                        <form action="{{ url_for('ledger') }}" method="POST">
-                            <input type="hidden" id="customerid_{{ row['customer.id'] }}" name="customerid" value="{{ row['customer_id'] }}">
-                            <input type="hidden" id="installmentid_{{ row['id'] }}" name="installmentid" value="{{ row['id'] }}">
-
-                            <input type="submit" value=">>Ledger"/></div>
-                        </form>
-
-                    </td>
+                   
                 </tr>
                 {% endfor %}
             </tbody>
