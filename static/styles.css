@@ -80,6 +80,16 @@ form textarea {
     font-size: 1em;
 }
 
+form input[type="number"],
+form textarea {
+    width: 60%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
 form select
 {
     width: 65%;
