@@ -77,13 +77,19 @@ def addregion():
          with sql.connect("ht.db") as con:
                cur = con.cursor()
 
-               cur.execute("""
-                        INSERT INTO regions (name, value) VALUES 
-                                                (:name, :value)""",
-                                                (name, regionname))
-            
-               con.commit()
-               msg = "NEW REGION ADDED"
+               alreadyexisiedregion = cur.execute("""
+                            SELECT * FROM regions WHERE value = ? LIMIT 1
+                           """, (regionname,)).fetchone()
+
+               if not alreadyexisiedregion:  # If no matching region exists
+                  cur.execute("""
+                     INSERT INTO regions (name, value) 
+                     VALUES (:name, :value)
+                  """, {"name": name, "value": regionname})  # Use named parameters for clarity
+                  con.commit()
+                  msg = "NEW REGION ADDED"
+               else:
+                  msg = f"Region '{regionname}' already exists."
      
       except:
             con.rollback()
