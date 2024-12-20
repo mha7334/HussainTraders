@@ -163,9 +163,8 @@ def fetchAllInstallments(msg):
    cur.execute("select * from installments Inner join customers on installments.customer_id = customers.id ORDER BY MODIFIED DESC LIMIT 100")
    customers = cur.fetchall()
 
-   cur.execute("SELECT name, value FROM regions")
-   regions = cur.fetchall()
-   
+   cur.execute("SELECT name, value FROM regions ORDER BY value")
+   regions = cur.fetchall()   
    return render_template("listcust.html", customers=customers, regions=regions, msg=msg)
    
 def fetchAllInstallmentsByRegion(msg,region):
@@ -185,6 +184,7 @@ def fetchAllInstallmentsByRegion(msg,region):
 @app.route('/shortpayments', methods = ['POST'])
 def short_installments():
    region = request.form['region']
+   action = request.form.get('action')
    con = sql.connect("ht.db")
    con.row_factory = sql.Row
    
@@ -197,13 +197,14 @@ def short_installments():
    regions = cur.fetchall()
 
    if region == 'all':
-# Query for records modified on or after the 5th of the current month
       cur.execute("""
          select * from installments Inner join customers on installments.customer_id = customers.id
          WHERE modified <= ?
       """, (current_month_5th,))
-
       customers = cur.fetchall()
+      if action == 'Print':
+         return render_template("printlist.html", customers=customers, selected_region='All Rregions')   
+      
       return render_template("listcust.html", customers = customers, regions=regions, selected_region='all')
    else:
       cur.execute("""
@@ -212,8 +213,11 @@ def short_installments():
       """, (current_month_5th,region))
 
       customers = cur.fetchall()
+      if action == 'Print':
+         return render_template("printlist.html", customers=customers, selected_region=region)   
+      
       return render_template("listcust.html", customers = customers, regions=regions, selected_region=region)
-
+   
 @app.route('/ledger', methods = ['POST'])
 def ledger():
    customer_id = request.form['customerid']

@@ -1,0 +1,52 @@
+<!doctype html>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Customer List for region: {{selected_region }}</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<html>
+
+   <body>
+    
+      <table>
+         <tr>
+            <td colspan="2">
+              <h4>{{ selected_region}}</h4> 
+            </td>
+            <td colspan="2">
+               <h4><a href = "\listcust"><<< Go back</a></h4>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               Last Payment
+            </td>
+            <td>
+               Name
+            </td>
+            <td>
+               Father's Name
+            </td>
+            <td>
+               Address
+            </td>
+            <td>
+               Mobile#
+            </td>       
+         </tr>
+       
+         {% for row in customers %}
+         <tr>
+            {% set first_part = row["modified"].split(' ')[0] %}
+            <td>{{ first_part }}</td>
+            <td>{{row.name}}</td>
+            <td>{{row.father_name}}</td>
+            <td>{{row.addr}}</td>
+            <td>{{row.mobile_number}}</td>
+         </tr>       
+         {% endfor %}
+      </table>
+
+     
+   </body>
+</html>
