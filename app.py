@@ -191,7 +191,7 @@ def short_installments():
    cur = con.cursor()
 
    now = datetime.now()
-   current_month_5th = now.replace(day=18).strftime('%Y-%m-%d %H:%M:%S')
+   current_month_5th = now.replace(day=25).strftime('%Y-%m-%d %H:%M:%S')
 
    cur.execute("SELECT name, value FROM regions")
    regions = cur.fetchall()
