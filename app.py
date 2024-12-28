@@ -1,10 +1,22 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, jsonify, render_template, request, redirect, session, flash
 import sqlite3 as sql
 from datetime import datetime
 
 
 app = Flask(__name__)
 app.secret_key = 'fasdgfdgdfg'
+
+
+
+data = {
+    "message": "Welcome to the Flask API!",
+    "status": "success"
+}
+<
+@app.route('/api', methods=['GET'])
+def get_api():
+    # Respond with JSON data
+    return jsonify(data), 200
 
 @app.route('/')
 def home():
