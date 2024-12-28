@@ -12,7 +12,7 @@ data = {
     "message": "Welcome to the Flask API!",
     "status": "success"
 }
-<
+
 @app.route('/api', methods=['GET'])
 def get_api():
     # Respond with JSON data
